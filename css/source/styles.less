@@ -1,11 +1,18 @@
 @font-color: #5c5c5c;
 @stat-color: #5AC4FF;
+@length10: 10px;
 @length20: 20px;
+@length30: 30px;
 @length40: 40px;
 
+@font-face {
+  font-family: myFont;
+  src: url(../../templates/font.ttf);
+}
 .menu, .tests{
   color: @font-color;
   float: left;
+  font-family: myFont;
   padding: @length20;
 
 
@@ -25,7 +32,7 @@
 
 .menu h2, .tests h2{
   display: inline-block;
-  font-size: @length20;
+  font-size: @length30;
   font-weight: bold;
   padding: @length20 0;
 }
@@ -34,4 +41,14 @@
   display: inline-block;
   color: @stat-color;
   font-weight: bold;
+}
+
+#qList li, .question li{
+  font-size: @length20;
+  cursor: pointer;
+  margin: @length10 0;
+}
+
+.tests{
+  display: none;
 }

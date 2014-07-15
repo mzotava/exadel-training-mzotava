@@ -1,7 +1,12 @@
+@font-face {
+  font-family: myFont;
+  src: url(../../templates/font.ttf);
+}
 .menu,
 .tests {
   color: #5c5c5c;
   float: left;
+  font-family: myFont;
   padding: 20px;
 }
 .menu h1,
@@ -20,7 +25,7 @@
 .menu h2,
 .tests h2 {
   display: inline-block;
-  font-size: 20px;
+  font-size: 30px;
   font-weight: bold;
   padding: 20px 0;
 }
@@ -29,4 +34,13 @@
   display: inline-block;
   color: #5ac4ff;
   font-weight: bold;
+}
+#qList li,
+.question li {
+  font-size: 20px;
+  cursor: pointer;
+  margin: 10px 0;
+}
+.tests {
+  display: none;
 }
