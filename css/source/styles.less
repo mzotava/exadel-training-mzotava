@@ -1,14 +1,37 @@
-@base: #f938ab;
+@font-color: #5c5c5c;
+@stat-color: #5AC4FF;
+@length20: 20px;
+@length40: 40px;
 
-.box-shadow(@style, @c) when (iscolor(@c)) {
-  -webkit-box-shadow: @style @c;
-  box-shadow:         @style @c;
+.menu, .tests{
+  color: @font-color;
+  float: left;
+  padding: @length20;
+
+
 }
-.box-shadow(@style, @alpha: 50%) when (isnumber(@alpha)) {
-  .box-shadow(@style, rgba(0, 0, 0, @alpha));
+
+.menu h1, .tests h1{
+  font-size: @length40;
+  vertical-align: top;
+  &:before {
+    content: " ";
+    display: inline-block;
+    height: @length40;
+    width: @length40;
+    background: url(../../images/content/square.png);
+  }
 }
-.box {
-  color: saturate(@base, 5%);
-  border-color: lighten(@base, 30%);
-  div { .box-shadow(0 0 5px, 30%) }
+
+.menu h2, .tests h2{
+  display: inline-block;
+  font-size: @length20;
+  font-weight: bold;
+  padding: @length20 0;
+}
+
+.number, .statistic{
+  display: inline-block;
+  color: @stat-color;
+  font-weight: bold;
 }
