@@ -1383,10 +1383,13 @@ var quizData = [
     }
 ]
 
-    for(var i = 0; i<quizData.length; i++){
+
+    var quizDataLength = quizData.length;
+
+    for(var i = 0; i < quizDataLength; i++){
         var listItem = document.createElement("li");
         listItem.appendChild(document.createTextNode(i+1 + ". " + quizData[i].title));
-        var qList = document.getElementById("qList")
+        var qList = document.getElementById("qList");
         qList.appendChild(listItem);
     }
 
@@ -1403,17 +1406,42 @@ var quizData = [
         tests.style.display="none";
     }
 
-    var loadTest = function(){
+    var loadTest = function(target){
+        for(var i = 0, j = 0; i< quizDataLength; i++){
 
+            var targetNum = target.innerHTML.slice(0,1);
 
+            if(targetNum == i+1){
+
+                var questionsTheme = document.getElementById("questionsTheme");
+                questionsTheme.innerHTML="";
+                questionsTheme.appendChild(document.createTextNode(i+1 + ". " + quizData[i].description));
+
+                var questionsName = document.getElementById("questionName");
+                questionsName.innerHTML="";
+                questionsName.appendChild(document.createTextNode(quizData[i].questions[j].question));
+
+                var questionLength = quizData[i].questions[j].answers.length;
+                var answerList = document.getElementById("answerList");
+                answerList.innerHTML="";
+
+                for(var k = 0; k < questionLength; k++){
+                    var variant = document.createElement("li");
+                    variant.appendChild(document.createTextNode(k+1 + ". " + quizData[i].questions[j].answers[k]));
+                    answerList.appendChild(variant);
+                }
+
+            }
+        }
     }
 
     document.getElementById("menu").addEventListener("click", function(e){
         var event = e || window.event;
         var target = event.target || event.srcElement;
-        if (target.tagName.toLocaleLowerCase() === 'li')
+        if (target.tagName.toLocaleLowerCase() === 'li') {
             toggleTest();
             loadTest(target);
+        }
 } );
 
     document.getElementById("goBack").onclick = function(){
