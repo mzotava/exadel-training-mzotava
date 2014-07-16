@@ -1383,17 +1383,6 @@ var quizData = [
     }
 ]
 
-var menu = document.getElementsByClassName("menu");
-var tests = document.getElementsByClassName("tests");
-
-var toogleTest = function(){
-    alert('Спасибо');
-    menu.css("display","none");
-    tests.getElementsByClassName("tests").css("display", "block");
-    alert('Спасибо2');
-
-}
-
     for(var i = 0; i<quizData.length; i++){
         var listItem = document.createElement("li");
         listItem.appendChild(document.createTextNode(i+1 + ". " + quizData[i].title));
@@ -1401,6 +1390,49 @@ var toogleTest = function(){
         qList.appendChild(listItem);
     }
 
-    var qwe =  document.getElementsByTagName("li");
-    qwe.attachEvent("onclick", toogleTest);
+    var menu = document.getElementById("menu");
+    var tests = document.getElementById("tests");
+
+    var toggleTest = function(){
+        menu.style.display="none";
+        tests.style.display="block";
+    }
+
+    var toggleMenu = function(){
+        menu.style.display="block";
+        tests.style.display="none";
+    }
+
+    var loadTest = function(){
+
+
+    }
+
+    document.getElementById("menu").addEventListener("click", function(e){
+        var event = e || window.event;
+        var target = event.target || event.srcElement;
+        if (target.tagName.toLocaleLowerCase() === 'li')
+            toggleTest();
+            loadTest(target);
+} );
+
+    document.getElementById("goBack").onclick = function(){
+        toggleMenu();
+    }
+
+
+
+
+
+
+
+
+//menu.onclick = function(e){
+//    var event = e || window.event;
+//    var target = event.target || event.srcElement;
+//    if (target.tagName != 'li') return;
+//
+//    menu.toggle(e);
+//    tests.getElementsByClassName("tests").css("display", "block");
+//}
 
