@@ -1384,29 +1384,45 @@ var quizData = [
 ]
 
 
+
+
     var quizDataLength = quizData.length;
+    var menu = document.getElementById("menu");
+    var tests = document.getElementById("tests");
+
+    var rightAnswers = 0;
+    var currentRightAnswer;
+    var currentTestNum = 0;
+    var currentQuestionNum = 0;
 
     for(var i = 0; i < quizDataLength; i++){
         var listItem = document.createElement("li");
+        listItem.setAttribute("data-q-index", i+1);
         listItem.appendChild(document.createTextNode(i+1 + ". " + quizData[i].title));
         var qList = document.getElementById("qList");
         qList.appendChild(listItem);
     }
 
-    var menu = document.getElementById("menu");
-    var tests = document.getElementById("tests");
 
     var toggleTest = function(){
 
-        menu.style.display="none";
-        tests.style.display="block";
+        menu.classList.add("hidden");
+        tests.classList.remove("hidden");
     }
 
     var toggleMenu = function(){
 
-        menu.style.display="block";
-        tests.style.display="none";
+        menu.classList.remove("hidden");
+        tests.classList.add("hidden");
     }
+
+    var getTargetNum = function(target){
+        return target.getAttribute("data-q-index");
+    }
+
+// i -- номер зачета
+// j -- номер вопроса в зачете
+// k -- номер варианта в вопросе
 
     var setQuestionsTheme = function(i){
 
@@ -1431,23 +1447,43 @@ var quizData = [
         for(var k = 0; k < questionLength; k++){
 
             var variant = document.createElement("li");
+            variant.setAttribute("data-q-index", k+1); /////////////////////////////////////////////////
             variant.appendChild(document.createTextNode(k+1 + ". " + quizData[i].questions[j].answers[k]));
             answerList.appendChild(variant);
         }
+        currentRightAnswer = quizData[i].questions[j].right;
     }
 
-    var loadTest = function(target){
-        for(var i = 0, j = 0; i< quizDataLength; i++){
+    var setStatistic = function(i, j){
+        var stat = document.getElementById("statistic");
+        stat.innerHTML="";
+        stat.appendChild(document.createTextNode(j+1 + "/" + quizData[i].questions.length));
+    }
 
-            var targetNum = target.innerHTML.slice(0,1);
+    var setQuestionNum = function(i, j){
+        var num = document.getElementById("questionNumber");
+        num.innerHTML="";
+        num.appendChild(document.createTextNode(j+1 + "#"));
+    }
 
-            if(targetNum == i+1){
+
+
+
+
+    var loadTest = function(testNum, currentQuestionNum){
+        for(var i = 0; i< quizDataLength; i++){
+
+            if(testNum == i+1){
 
                 setQuestionsTheme(i);
 
-                setQuestionName(i, j);
+                setStatistic(i, currentQuestionNum);
 
-                setAnswerList(i, j);
+                setQuestionName(i, currentQuestionNum);
+
+                setQuestionNum(i,currentQuestionNum);
+
+                setAnswerList(i, currentQuestionNum);
 
             }
         }
@@ -1457,13 +1493,42 @@ var quizData = [
         var event = e || window.event;
         var target = event.target || event.srcElement;
         if (target.tagName.toLocaleLowerCase() === 'li') {
+            currentTestNum = target.getAttribute("data-q-index");
             toggleTest();
-            loadTest(target);
+            loadTest(currentTestNum, currentQuestionNum);
         }
-} );
+    } );
 
     document.getElementById("goBack").onclick = function(){
         toggleMenu();
+        currentQuestionNum=0;
+        currentTestNum=0;
+    }
+
+    document.getElementById("answerList").addEventListener("click", function(e){
+        var event = e || window.event;
+        var target = event.target || event.srcElement;
+        var boldBlue = document.getElementsByClassName("boldBlue");
+        if(boldBlue.length)
+            boldBlue[0].classList.remove("boldBlue");
+        if (target.tagName.toLocaleLowerCase() === 'li')
+            target.classList.add("boldBlue");
+
+//            toggleTest();
+//            loadTest(target);
+
+    })
+
+    document.getElementById("setAnswer").onclick = function(){
+        var userAnswer = document.getElementsByClassName("boldBlue");
+        if(userAnswer[0].getAttribute("data-q-index") == currentRightAnswer)
+            rightAnswers++;
+
+        currentQuestionNum+=1;
+
+        loadTest(currentTestNum, currentQuestionNum);
+
+
     }
 
 
