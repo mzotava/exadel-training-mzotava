@@ -1390,10 +1390,11 @@ var quizData = [
     var menu = document.getElementById("menu");
     var tests = document.getElementById("tests");
 
-    var rightAnswers = 0;
+    var rightAnswers = [];
     var currentRightAnswer;
     var currentTestNum = 0;
     var currentQuestionNum = 0;
+    var noansweredQuestions = [];
 
     for(var i = 0; i < quizDataLength; i++){
         var listItem = document.createElement("li");
@@ -1416,9 +1417,9 @@ var quizData = [
         tests.classList.add("hidden");
     }
 
-    var getTargetNum = function(target){
-        return target.getAttribute("data-q-index");
-    }
+//    var getTargetNum = function(target){
+//        return target.getAttribute("data-q-index");
+//    }
 
 // i -- номер зачета
 // j -- номер вопроса в зачете
@@ -1466,11 +1467,26 @@ var quizData = [
         num.appendChild(document.createTextNode(j+1 + "#"));
     }
 
+    var toggleStatistic = function(testNum, rightAnswers){
+        toggleMenu();////////////////////////////////////////
+
+    }
 
 
 
 
-    var loadTest = function(testNum, currentQuestionNum){
+
+    var loadTest = function(testNum, currentQuestionNum, rightAnswers){
+        if(currentQuestionNum >= quizData[testNum-1].questions.length) {
+            if (noansweredQuestions !== 0) {
+                // заново пройтись по массиву неотвеченных вопросов хз как
+                // типа каррент квест нам присвоить
+            }
+        }
+        else toggleStatistic(testNum, rightAnswers);/////////////////////////////
+
+
+
         for(var i = 0; i< quizDataLength; i++){
 
             if(testNum == i+1){
@@ -1520,17 +1536,27 @@ var quizData = [
     })
 
     document.getElementById("setAnswer").onclick = function(){
+
         var userAnswer = document.getElementsByClassName("boldBlue");
+
         if(userAnswer[0].getAttribute("data-q-index") == currentRightAnswer)
-            rightAnswers++;
+            rightAnswers.push(currentQuestionNum);
 
         currentQuestionNum+=1;
 
-        loadTest(currentTestNum, currentQuestionNum);
+        loadTest(currentTestNum, currentQuestionNum, rightAnswers);
+
 
 
     }
 
+
+    document.getElementById("skipQuestion").onclick = function() {
+        noansweredQuestions.push(currentQuestionNum);
+        currentQuestionNum+=1;
+        loadTest(currentTestNum, currentQuestionNum, rightAnswers);
+
+    }
 
 
 
