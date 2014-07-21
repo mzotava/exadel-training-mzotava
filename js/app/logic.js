@@ -1537,7 +1537,7 @@ var quizData = [
         toggleMenu();
         currentQuestionNum=0;
         currentTestNum=0;
-        rightAnswers=null;
+        rightAnswers=[];
     };
 
     document.getElementById("answerList").addEventListener("click", function(e){
