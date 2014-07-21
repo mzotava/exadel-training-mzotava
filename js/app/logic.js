@@ -1394,7 +1394,6 @@ var quizData = [
     var currentRightAnswer;
     var currentTestNum = 0;
     var currentQuestionNum = 0;
-    var noansweredQuestions = [];
 
     for(var i = 0; i < quizDataLength; i++){
         var listItem = document.createElement("li");
@@ -1409,17 +1408,14 @@ var quizData = [
 
         menu.classList.add("hidden");
         tests.classList.remove("hidden");
-    }
+    };
 
     var toggleMenu = function(){
 
         menu.classList.remove("hidden");
         tests.classList.add("hidden");
-    }
+    };
 
-//    var getTargetNum = function(target){
-//        return target.getAttribute("data-q-index");
-//    }
 
 // i -- номер зачета
 // j -- номер вопроса в зачете
@@ -1430,14 +1426,14 @@ var quizData = [
         var questionsTheme = document.getElementById("questionsTheme");
         questionsTheme.innerHTML="";
         questionsTheme.appendChild(document.createTextNode(i+1 + ". " + quizData[i].description));
-    }
+    };
 
     var setQuestionName = function(i, j){
 
         var questionsName = document.getElementById("questionName");
         questionsName.innerHTML="";
         questionsName.appendChild(document.createTextNode(quizData[i].questions[j].question));
-    }
+    };
 
     var setAnswerList = function(i, j){
 
@@ -1448,48 +1444,68 @@ var quizData = [
         for(var k = 0; k < questionLength; k++){
 
             var variant = document.createElement("li");
-            variant.setAttribute("data-q-index", k+1); /////////////////////////////////////////////////
+            variant.setAttribute("data-q-index", k+1);
             variant.appendChild(document.createTextNode(k+1 + ". " + quizData[i].questions[j].answers[k]));
             answerList.appendChild(variant);
         }
         currentRightAnswer = quizData[i].questions[j].right;
-    }
+    };
 
     var setStatistic = function(i, j){
         var stat = document.getElementById("statistic");
         stat.innerHTML="";
         stat.appendChild(document.createTextNode(j+1 + "/" + quizData[i].questions.length));
-    }
+    };
 
     var setQuestionNum = function(i, j){
         var num = document.getElementById("questionNumber");
         num.innerHTML="";
         num.appendChild(document.createTextNode(j+1 + "#"));
-    }
+    };
 
-    var toggleStatistic = function(testNum, rightAnswers){
-        toggleMenu();////////////////////////////////////////
+    var toggleStatistic = function(){
 
-    }
+        document.getElementById("statistic").innerHTML="";
+        document.getElementById("question").innerHTML="";
+        document.getElementById("skipQuestion").classList.add("hidden");
+        document.getElementById("setAnswer").classList.add("hidden");
+        document.getElementById("results").classList.remove("hidden");
 
-
-
-
-
-    var loadTest = function(testNum, currentQuestionNum, rightAnswers){
-        if(currentQuestionNum >= quizData[testNum-1].questions.length) {
-            if (noansweredQuestions !== 0) {
-                // заново пройтись по массиву неотвеченных вопросов хз как
-                // типа каррент квест нам присвоить
-            }
+        for(var i = 0; i < rightAnswers.length; i++){
+            var resultsItem = document.createElement("li");
+            resultsItem.appendChild(document.createTextNode(rightAnswers[i]+1 + ". "));
+            var resultsList = document.getElementById("resultsList");
+            resultsList.appendChild(resultsItem);
         }
-        else toggleStatistic(testNum, rightAnswers);/////////////////////////////
+    };
 
 
 
-        for(var i = 0; i< quizDataLength; i++){
 
-            if(testNum == i+1){
+
+    var loadTest = function(testNum) {
+
+        var qLength = quizData[testNum - 1].questions.length;
+        var flag = 0;
+        for(var k = 0; k < qLength; k++)
+            if(quizData[testNum-1].questions[k].hasOwnProperty("answered"))
+                flag++;
+
+        if(flag == qLength) {
+            toggleStatistic(); return;
+        }
+
+        while(currentQuestionNum < qLength && quizData[testNum-1].questions[currentQuestionNum].hasOwnProperty("answered"))
+            currentQuestionNum++;
+
+        if (currentQuestionNum >= qLength)
+             currentQuestionNum = 0;
+
+
+
+        for (var i = 0; i < quizDataLength; i++) {
+
+            if (testNum == i + 1 ) {
 
                 setQuestionsTheme(i);
 
@@ -1497,13 +1513,15 @@ var quizData = [
 
                 setQuestionName(i, currentQuestionNum);
 
-                setQuestionNum(i,currentQuestionNum);
+                setQuestionNum(i, currentQuestionNum);
 
                 setAnswerList(i, currentQuestionNum);
 
             }
+
         }
-    }
+
+    };
 
     document.getElementById("menu").addEventListener("click", function(e){
         var event = e || window.event;
@@ -1511,7 +1529,7 @@ var quizData = [
         if (target.tagName.toLocaleLowerCase() === 'li') {
             currentTestNum = target.getAttribute("data-q-index");
             toggleTest();
-            loadTest(currentTestNum, currentQuestionNum);
+            loadTest(currentTestNum);
         }
     } );
 
@@ -1519,7 +1537,8 @@ var quizData = [
         toggleMenu();
         currentQuestionNum=0;
         currentTestNum=0;
-    }
+        rightAnswers=null;
+    };
 
     document.getElementById("answerList").addEventListener("click", function(e){
         var event = e || window.event;
@@ -1530,10 +1549,7 @@ var quizData = [
         if (target.tagName.toLocaleLowerCase() === 'li')
             target.classList.add("boldBlue");
 
-//            toggleTest();
-//            loadTest(target);
-
-    })
+    });
 
     document.getElementById("setAnswer").onclick = function(){
 
@@ -1542,19 +1558,19 @@ var quizData = [
         if(userAnswer[0].getAttribute("data-q-index") == currentRightAnswer)
             rightAnswers.push(currentQuestionNum);
 
-        currentQuestionNum+=1;
+        quizData[currentTestNum-1].questions[currentQuestionNum].answered = true;
 
-        loadTest(currentTestNum, currentQuestionNum, rightAnswers);
+//        currentQuestionNum+=1;
+
+        loadTest(currentTestNum);
 
 
 
     }
 
-
     document.getElementById("skipQuestion").onclick = function() {
-        noansweredQuestions.push(currentQuestionNum);
         currentQuestionNum+=1;
-        loadTest(currentTestNum, currentQuestionNum, rightAnswers);
+        loadTest(currentTestNum);
 
     }
 

@@ -2,45 +2,57 @@
   font-family: myFont;
   src: url(../../templates/font.ttf);
 }
-.menu,
-.tests {
+#menu,
+#tests {
   color: #5c5c5c;
   float: left;
   font-family: myFont;
   padding: 20px;
 }
-.menu h1,
-.tests h1 {
+#menu h1,
+#tests h1 {
   font-size: 40px;
   vertical-align: top;
 }
-.menu h1:before,
-.tests h1:before {
+#menu h1:before,
+#tests h1:before {
   content: " ";
   display: inline-block;
   height: 40px;
   width: 40px;
   background: url(../../images/content/square.png);
 }
-.menu h2,
-.tests h2 {
+#menu h2,
+#tests h2 {
   display: inline-block;
   font-size: 30px;
   font-weight: bold;
   padding: 20px 0;
 }
-.number,
-.statistic {
+#questionNumber,
+#statistic,
+#questionName {
   display: inline-block;
   color: #5ac4ff;
   font-weight: bold;
+  font-size: 20px;
 }
 #qList li,
-.question li {
+#question li {
   font-size: 20px;
   cursor: pointer;
   margin: 10px 0;
 }
-.tests {
+.hidden {
   display: none;
+}
+.boldBlue {
+  font-weight: bold;
+  color: #5ac4ff;
+}
+#resultsList li {
+  display: inline;
+  font-size: 30px;
+  font-weight: bold;
+  color: #5ac4ff;
 }
