@@ -1383,31 +1383,35 @@ var quizData = [
     }
 ]
 
-
-
-
     var quizDataLength = quizData.length;
     var menu = document.getElementById("menu");
     var tests = document.getElementById("tests");
+    var results = document.getElementById("results");
 
     var rightAnswers = [];
     var currentRightAnswer;
     var currentTestNum = 0;
     var currentQuestionNum = 0;
+    var AnsweredNum = 0;
 
-    for(var i = 0; i < quizDataLength; i++){
+    for(var itemNum = 0; itemNum < quizDataLength; itemNum++){
         var listItem = document.createElement("li");
-        listItem.setAttribute("data-q-index", i+1);
-        listItem.appendChild(document.createTextNode(i+1 + ". " + quizData[i].title));
+        listItem.setAttribute("data-q-index", itemNum+1);
+        listItem.appendChild(document.createTextNode(itemNum+1 + ". " + quizData[itemNum].title));
         var qList = document.getElementById("qList");
         qList.appendChild(listItem);
     }
-
 
     var toggleTest = function(){
 
         menu.classList.add("hidden");
         tests.classList.remove("hidden");
+        results.classList.add("hidden");
+        document.getElementById("statistic").classList.remove("hidden");
+        document.getElementById("question").classList.remove("hidden");
+        document.getElementById("skipQuestion").classList.remove("hidden");
+        document.getElementById("setAnswer").classList.remove("hidden");
+
     };
 
     var toggleMenu = function(){
@@ -1416,110 +1420,108 @@ var quizData = [
         tests.classList.add("hidden");
     };
 
+    var setStatistic = function(testNum, questionNum){
 
-// i -- номер зачета
-// j -- номер вопроса в зачете
-// k -- номер варианта в вопросе
+        var stat = document.getElementById("statistic");
+        stat.innerHTML="";
+        stat.appendChild(document.createTextNode(questionNum+1 + "/" + quizData[testNum].questions.length));
+    };
 
-    var setQuestionsTheme = function(i){
+    var setQuestionsTheme = function(testNum){
 
         var questionsTheme = document.getElementById("questionsTheme");
         questionsTheme.innerHTML="";
-        questionsTheme.appendChild(document.createTextNode(i+1 + ". " + quizData[i].description));
+        questionsTheme.appendChild(document.createTextNode(testNum+1 + ". " + quizData[testNum].description));
     };
 
-    var setQuestionName = function(i, j){
+    var setQuestionName = function(testNum, questionNum){
 
         var questionsName = document.getElementById("questionName");
         questionsName.innerHTML="";
-        questionsName.appendChild(document.createTextNode(quizData[i].questions[j].question));
+        questionsName.appendChild(document.createTextNode(quizData[testNum].questions[questionNum].question));
     };
 
-    var setAnswerList = function(i, j){
+    var setAnswerList = function(testNum, questionNum){
 
-        var questionLength = quizData[i].questions[j].answers.length;
+        var answerLength = quizData[testNum].questions[questionNum].answers.length;
+
         var answerList = document.getElementById("answerList");
         answerList.innerHTML="";
 
-        for(var k = 0; k < questionLength; k++){
+        for(var answerNum = 0; answerNum < answerLength; answerNum++){
 
             var variant = document.createElement("li");
-            variant.setAttribute("data-q-index", k+1);
-            variant.appendChild(document.createTextNode(k+1 + ". " + quizData[i].questions[j].answers[k]));
+            variant.setAttribute("data-q-index", answerNum+1);
+            variant.appendChild(document.createTextNode(answerNum+1 + ". " + quizData[testNum].questions[questionNum].answers[answerNum]));
             answerList.appendChild(variant);
         }
-        currentRightAnswer = quizData[i].questions[j].right;
+        currentRightAnswer = quizData[testNum].questions[questionNum].right;
     };
 
-    var setStatistic = function(i, j){
-        var stat = document.getElementById("statistic");
-        stat.innerHTML="";
-        stat.appendChild(document.createTextNode(j+1 + "/" + quizData[i].questions.length));
-    };
-
-    var setQuestionNum = function(i, j){
+    var setQuestionNum = function(testNum, questionNum){
         var num = document.getElementById("questionNumber");
         num.innerHTML="";
-        num.appendChild(document.createTextNode(j+1 + "#"));
+        num.appendChild(document.createTextNode(questionNum+1 + "#"));
     };
 
     var toggleStatistic = function(){
 
-        document.getElementById("statistic").innerHTML="";
-        document.getElementById("question").innerHTML="";
+        document.getElementById("statistic").classList.add("hidden");
+        document.getElementById("question").classList.add("hidden");
         document.getElementById("skipQuestion").classList.add("hidden");
         document.getElementById("setAnswer").classList.add("hidden");
-        document.getElementById("results").classList.remove("hidden");
+        results.classList.remove("hidden");
 
-        for(var i = 0; i < rightAnswers.length; i++){
+        for(var rightQuestion = 0; rightQuestion < rightAnswers.length; rightQuestion++){
+
             var resultsItem = document.createElement("li");
-            resultsItem.appendChild(document.createTextNode(rightAnswers[i]+1 + ". "));
+            resultsItem.appendChild(document.createTextNode(rightAnswers[rightQuestion]+1 + ". "));
             var resultsList = document.getElementById("resultsList");
             resultsList.appendChild(resultsItem);
         }
     };
 
+    var checkingOnEnd = function(testNum, length){
 
+        if (currentQuestionNum >= length)
+            currentQuestionNum = 0;
 
-
-
-    var loadTest = function(testNum) {
-
-        var qLength = quizData[testNum - 1].questions.length;
-        var flag = 0;
-        for(var k = 0; k < qLength; k++)
-            if(quizData[testNum-1].questions[k].hasOwnProperty("answered"))
-                flag++;
-
-        if(flag == qLength) {
-            toggleStatistic(); return;
-        }
-
-        while(currentQuestionNum < qLength && quizData[testNum-1].questions[currentQuestionNum].hasOwnProperty("answered"))
+        while(currentQuestionNum < length && quizData[testNum].questions[currentQuestionNum].hasOwnProperty("answered"))
             currentQuestionNum++;
 
-        if (currentQuestionNum >= qLength)
-             currentQuestionNum = 0;
+        if (currentQuestionNum >= length)
+            currentQuestionNum = 0;
+    };
 
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    var loadTest = function(testNum) {
 
+        var qLength = quizData[testNum].questions.length;
+        AnsweredNum = 0;
 
-        for (var i = 0; i < quizDataLength; i++) {
+        for(var variantNum = 0; variantNum < qLength; variantNum++)
+            if(quizData[testNum].questions[variantNum].hasOwnProperty("answered"))
+                AnsweredNum++;
 
-            if (testNum == i + 1 ) {
+        if(AnsweredNum == qLength) {
+            for(var variantNumForDel = 0; variantNumForDel < qLength; variantNumForDel++)
+                delete quizData[testNum].questions[variantNumForDel].answered;
 
-                setQuestionsTheme(i);
-
-                setStatistic(i, currentQuestionNum);
-
-                setQuestionName(i, currentQuestionNum);
-
-                setQuestionNum(i, currentQuestionNum);
-
-                setAnswerList(i, currentQuestionNum);
-
-            }
-
+            toggleStatistic();
+            return;
         }
+
+        checkingOnEnd(testNum, qLength);
+
+        setQuestionsTheme(currentTestNum);
+
+        setStatistic(currentTestNum, currentQuestionNum);
+
+        setQuestionName(currentTestNum, currentQuestionNum);
+
+        setQuestionNum(currentTestNum, currentQuestionNum);
+
+        setAnswerList(currentTestNum, currentQuestionNum);
 
     };
 
@@ -1527,18 +1529,11 @@ var quizData = [
         var event = e || window.event;
         var target = event.target || event.srcElement;
         if (target.tagName.toLocaleLowerCase() === 'li') {
-            currentTestNum = target.getAttribute("data-q-index");
+            currentTestNum = target.getAttribute("data-q-index")-1;
             toggleTest();
             loadTest(currentTestNum);
         }
     } );
-
-    document.getElementById("goBack").onclick = function(){
-        toggleMenu();
-        currentQuestionNum=0;
-        currentTestNum=0;
-        rightAnswers=[];
-    };
 
     document.getElementById("answerList").addEventListener("click", function(e){
         var event = e || window.event;
@@ -1548,31 +1543,33 @@ var quizData = [
             boldBlue[0].classList.remove("boldBlue");
         if (target.tagName.toLocaleLowerCase() === 'li')
             target.classList.add("boldBlue");
-
     });
 
-    document.getElementById("setAnswer").onclick = function(){
+    document.getElementById("goBack").addEventListener("click", function(){
+        toggleMenu();
+        currentQuestionNum = 0;
+        currentTestNum = 0;
+        AnsweredNum = 0;
+        rightAnswers=[];
+    });
+
+    document.getElementById("setAnswer").addEventListener("click", function(){
 
         var userAnswer = document.getElementsByClassName("boldBlue");
 
         if(userAnswer[0].getAttribute("data-q-index") == currentRightAnswer)
             rightAnswers.push(currentQuestionNum);
 
-        quizData[currentTestNum-1].questions[currentQuestionNum].answered = true;
-
-//        currentQuestionNum+=1;
+        quizData[currentTestNum].questions[currentQuestionNum].answered = true;
+        currentQuestionNum+=1;
 
         loadTest(currentTestNum);
+    });
 
-
-
-    }
-
-    document.getElementById("skipQuestion").onclick = function() {
+    document.getElementById("skipQuestion").addEventListener("click", function(){
         currentQuestionNum+=1;
         loadTest(currentTestNum);
-
-    }
+    });
 
 
 
