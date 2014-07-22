@@ -1482,7 +1482,7 @@ var quizData = [
     };
 
     var checkingOnEnd = function(testNum, qLength){
-
+//do while
         if (currentQuestionNum >= qLength)
             currentQuestionNum = 0;
         while(currentQuestionNum < qLength && quizData[testNum].questions[currentQuestionNum].hasOwnProperty("answered"))
