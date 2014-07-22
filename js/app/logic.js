@@ -1471,56 +1471,55 @@ var quizData = [
         document.getElementById("skipQuestion").classList.add("hidden");
         document.getElementById("setAnswer").classList.add("hidden");
         results.classList.remove("hidden");
+        var resultsList = document.getElementById("resultsList");
+        resultsList.innerHTML="";
 
         for(var rightQuestion = 0; rightQuestion < rightAnswers.length; rightQuestion++){
-
             var resultsItem = document.createElement("li");
             resultsItem.appendChild(document.createTextNode(rightAnswers[rightQuestion]+1 + ". "));
-            var resultsList = document.getElementById("resultsList");
             resultsList.appendChild(resultsItem);
         }
     };
 
-    var checkingOnEnd = function(testNum, length){
+    var checkingOnEnd = function(testNum, qLength){
 
-        if (currentQuestionNum >= length)
+        if (currentQuestionNum >= qLength)
             currentQuestionNum = 0;
-
-        while(currentQuestionNum < length && quizData[testNum].questions[currentQuestionNum].hasOwnProperty("answered"))
+        while(currentQuestionNum < qLength && quizData[testNum].questions[currentQuestionNum].hasOwnProperty("answered"))
             currentQuestionNum++;
-
-        if (currentQuestionNum >= length)
+        if (currentQuestionNum >= qLength)
             currentQuestionNum = 0;
     };
 
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    var loadTest = function(testNum) {
+    var deleteAttrAnswered = function(testNum, qLength){
+        for(var variantNumForDel = 0; variantNumForDel < qLength; variantNumForDel++)
+            delete quizData[testNum].questions[variantNumForDel].answered;
+    };
 
-        var qLength = quizData[testNum].questions.length;
+    var countAnswered = function(testNum, qLength){
         AnsweredNum = 0;
-
         for(var variantNum = 0; variantNum < qLength; variantNum++)
             if(quizData[testNum].questions[variantNum].hasOwnProperty("answered"))
                 AnsweredNum++;
+    };
+//////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////
+
+    var loadTest = function() {
+
+        var qLength = quizData[currentTestNum].questions.length;
+        countAnswered(currentTestNum, qLength);
 
         if(AnsweredNum == qLength) {
-            for(var variantNumForDel = 0; variantNumForDel < qLength; variantNumForDel++)
-                delete quizData[testNum].questions[variantNumForDel].answered;
-
+            deleteAttrAnswered(currentTestNum, qLength);
             toggleStatistic();
             return;
         }
-
-        checkingOnEnd(testNum, qLength);
-
+        checkingOnEnd(currentTestNum, qLength);
         setQuestionsTheme(currentTestNum);
-
         setStatistic(currentTestNum, currentQuestionNum);
-
         setQuestionName(currentTestNum, currentQuestionNum);
-
         setQuestionNum(currentTestNum, currentQuestionNum);
-
         setAnswerList(currentTestNum, currentQuestionNum);
 
     };
@@ -1531,7 +1530,7 @@ var quizData = [
         if (target.tagName.toLocaleLowerCase() === 'li') {
             currentTestNum = target.getAttribute("data-q-index")-1;
             toggleTest();
-            loadTest(currentTestNum);
+            loadTest();
         }
     } );
 
@@ -1550,25 +1549,22 @@ var quizData = [
         currentQuestionNum = 0;
         currentTestNum = 0;
         AnsweredNum = 0;
-        rightAnswers=[];
+        rightAnswers.length = 0;
     });
 
     document.getElementById("setAnswer").addEventListener("click", function(){
 
         var userAnswer = document.getElementsByClassName("boldBlue");
-
         if(userAnswer[0].getAttribute("data-q-index") == currentRightAnswer)
             rightAnswers.push(currentQuestionNum);
-
         quizData[currentTestNum].questions[currentQuestionNum].answered = true;
         currentQuestionNum+=1;
-
-        loadTest(currentTestNum);
+        loadTest();
     });
 
     document.getElementById("skipQuestion").addEventListener("click", function(){
         currentQuestionNum+=1;
-        loadTest(currentTestNum);
+        loadTest();
     });
 
 
