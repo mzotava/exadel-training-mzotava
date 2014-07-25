@@ -1,11 +1,13 @@
-(function(wrapper){
+(function(win){
 
-    var testMod = function() {
+    var testMod = function(wrapper, data) {
         this.qList = wrapper.getElementById("qList");
         this.questionsName = wrapper.getElementById("questionName");
         this.questionsTheme = wrapper.getElementById("questionsTheme");
         this.num = wrapper.getElementById("questionNumber");
         this.answerList = wrapper.getElementById("answerList");
+
+        this.data = data || null;
     };
 
     testMod.prototype.setQuestionsTheme = function (testNum) {
@@ -56,7 +58,7 @@
             return;
         }
 
-        dataMod.checkingOnEnd(testNum, qLength);
+        this.data.checkingOnEnd(testNum, qLength);
         this.setQuestionsTheme(testNum);
         this.setStatistic(testNum, qNum);
         this.setQuestionName(testNum, qNum);
@@ -65,6 +67,6 @@
 
     };
 
-    window.testMod = testMod;
+    win.TestMod = testMod;
 
-});
+})(window);

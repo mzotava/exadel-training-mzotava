@@ -1,8 +1,9 @@
-(function(){
+(function(win){
 
-    var dataMod = function() {
+    var dataMod = function(persist) {
         this.quizData = [];
         this.quizDataLength = 0;
+        this.persist = persist || null;
     };
 
     dataMod.prototype.getDataFromServer = function(){
@@ -12,17 +13,17 @@
         if (req.status == 200)
             this.quizData = JSON.parse(req.responseText);
 
-        persistsnseMod.setJSON("qData", this.quizData)
+        this.persist.setJSON("qData", this.quizData)
         this.quizDataLength = this.quizData.length;
     };
 
     dataMod.prototype.checkingOnEnd = function (testNum, qLength) {
-        if (persistsnseMod.currentQuestionNum >= qLength)
-            persistsnseMod.currentQuestionNum = 0;
-        while (persistsnseMod.currentQuestionNum < qLength && this.quizData[testNum].questions[persistsnseMod.currentQuestionNum].hasOwnProperty("answered"))
-            persistsnseMod.currentQuestionNum++;
-        if (persistsnseMod.currentQuestionNum >= qLength)
-            persistsnseMod.currentQuestionNum = 0;
+        if (this.persist.currentQuestionNum >= qLength)
+            this.persist.currentQuestionNum = 0;
+        while (this.persist.currentQuestionNum < qLength && this.quizData[testNum].questions[this.persist.currentQuestionNum].hasOwnProperty("answered"))
+            this.persist.currentQuestionNum++;
+        if (this.persist.currentQuestionNum >= qLength)
+            this.persist.currentQuestionNum = 0;
     };
 
     dataMod.prototype.deleteAttrAnswered = function (testNum, qLength) {
@@ -31,11 +32,12 @@
     };
 
     dataMod.prototype.countAnswered = function (testNum, qLength) {
-        persistsnseMod.AnsweredNum = 0;
+        this.persist..AnsweredNum = 0;
         for (var variantNum = 0; variantNum < qLength; variantNum++)
             if (this.quizData[testNum].questions[variantNum].hasOwnProperty("answered"))
-                persistsnseMod.AnsweredNum++;
+                this.persist..AnsweredNum++;
     };
 
-    window.dataMod = dataMod;
-});
+    win.DataMod = dataMod;
+
+})(window);

@@ -2,7 +2,7 @@
 
     var eventMod = function(){
 
-        this.menu = wrapper.getElementById("menu");
+
         this.tests = wrapper.getElementById("tests");
 
         this.results = wrapper.getElementById("results");
@@ -13,6 +13,7 @@
         this.skipQuestion = wrapper.getElementById("skipQuestion");
         this.setAnswer = wrapper.getElementById("setAnswer");
         this.goBack = wrapper.getElementById("goBack");
+
 
 
     };

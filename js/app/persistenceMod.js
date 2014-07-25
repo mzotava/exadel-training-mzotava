@@ -1,4 +1,4 @@
-(function(){
+(function(win){
 
     var persistenceMod = function() {
         this.currentTestNum = 0;
@@ -25,18 +25,19 @@
     };
 
     persistenceMod.prototype.setNullToStorage = function(){
-        persistenceMod.currentTestNum = 0;
-        this.setToStorage("test", persistenceMod.currentTestNum);
+        this.currentTestNum = 0;
+        this.setToStorage("test", this.currentTestNum);
 
-        persistenceMod.currentQuestionNum = 0;
-        this.setToStorage("answ", persistsnseMod.currentQuestionNum);
+        this.currentQuestionNum = 0;
+        this.setToStorage("answ", this.currentQuestionNum);
 
-        persistenceMod.AnsweredNum = 0;
-        this.setToStorage("rightNum", persistsnseMod.AnsweredNum);
+        this.AnsweredNum = 0;
+        this.setToStorage("rightNum", this.AnsweredNum);
 
-        persistenceMod.rightAnswers.length = 0;
-        this.setToStorage("right", persistsnseMod.rightAnswers);
+        this.rightAnswers.length = 0;
+        this.setToStorage("right", this.rightAnswers);
     };
 
-    window.persistsnseMod = persistsnseMod;
-});
+    win.PersistenceMod = persistenceMod;
+
+})(window);

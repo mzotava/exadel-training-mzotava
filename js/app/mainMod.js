@@ -7,18 +7,19 @@ var mainMod = function() {
 
 mainMod.prototype.init = function(){
 
-    this.testMod = testMod(this.wrapper);
+    this.persistenceMod = new PersistenceMod();
+
+    this.dataMod = new DataMod(this.persistenceMod);
+
+    this.testMod = new TestMod(this.wrapper, this.dataMod);
     this.menuMod = menuMod(this.wrapper);
-    this.dataMod = dataMod();
-    this.persistenceMod = persistenceMod();
+
+
     this.eventMod = eventMod(this.wrapper);
 }
 
-window.onload = function(){
-    var main = mainMod();
-    main.init();
-
-}
+var main = new mainMod();
+main.init();
 
 
 
