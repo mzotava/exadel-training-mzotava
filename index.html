@@ -9,36 +9,42 @@
 
 </head>
 <body>
-
-<div id="menu">
-    <h1>ПДД</h1>
-    <h2>Доступные тесты</h2>
-    <ul id="qList">
-    </ul>
-</div>
-
-<div id="tests" class="hidden">
-    <h1>ПДД</h1>
-    <h2 id="questionsTheme"></h2>
-    <div id="statistic">  </div>
-    <div id="question">
-        <div id="questionNumber">  </div>
-        <div id="questionName">В каком ответе нет никакого ответа?</div>
-
-        <ul id="answerList">
+<div id="wrapper">
+    <div id="menu">
+        <h1>ПДД</h1>
+        <h2>Доступные тесты</h2>
+        <ul id="qList">
         </ul>
     </div>
-    <diV id="results" class="hidden">
-        <h2>Правильно отвеченные вопросы</h2>
-        <ul id="resultsList">
-        </ul>
+
+    <div id="tests" class="hidden">
+        <h1>ПДД</h1>
+        <h2 id="questionsTheme"></h2>
+        <div id="statistic">  </div>
+        <div id="question">
+            <div id="questionNumber">  </div>
+            <div id="questionName">В каком ответе нет никакого ответа?</div>
+
+            <ul id="answerList">
+            </ul>
+        </div>
+        <diV id="results" class="hidden">
+            <h2>Правильно отвеченные вопросы</h2>
+            <ul id="resultsList">
+            </ul>
+        </div>
+        <button id="setAnswer"> Ответить </button>
+        <button id="skipQuestion"> Пропустить </button>
+        <button id="goBack"> В начало </button>
     </div>
-    <button id="setAnswer"> Ответить </button>
-    <button id="skipQuestion"> Пропустить </button>
-    <button id="goBack"> В начало </button>
 </div>
 
+<script src="js/app/mainMod.js"></script>
+<script src="js/app/menuMod.js"></script>
+<script src="js/app/dataMod.js"></script>
+<script src="js/app/eventMod.js"></script>
+<script src="js/app/persistenceMod.js"></script>
+<script src="js/app/testMod.js"></script>
 
-<script src="js/app/logic.js"></script>
 </body>
 </html>
