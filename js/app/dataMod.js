@@ -32,11 +32,12 @@
     };
 
     dataMod.prototype.countAnswered = function (testNum, qLength) {
-        this.persist..AnsweredNum = 0;
+        this.persist.AnsweredNum = 0;
         for (var variantNum = 0; variantNum < qLength; variantNum++)
             if (this.quizData[testNum].questions[variantNum].hasOwnProperty("answered"))
-                this.persist..AnsweredNum++;
+                this.persist.AnsweredNum++;
     };
+
 
     win.DataMod = dataMod;
 

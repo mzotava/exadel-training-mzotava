@@ -38,6 +38,17 @@
         this.setToStorage("right", this.rightAnswers);
     };
 
+    persistenceMod.prototype.checking = function(){
+        if(this.getFromStorage("test"))
+            if (this.currentTestNum != this.getFromStorage("test")) {
+                this.currentQuestionNum = 0;
+                this.rightAnswers.length =0;
+                this.setToStorage("answ", this.currentQuestionNum);
+                this.setToStorage("right", this.rightAnswers);
+            }
+        this.setToStorage("test", persistsnseMod.currentTestNum);
+    };
+
     win.PersistenceMod = persistenceMod;
 
 })(window);

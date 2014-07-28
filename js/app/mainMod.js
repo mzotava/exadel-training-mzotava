@@ -10,13 +10,12 @@ mainMod.prototype.init = function(){
     this.persistenceMod = new PersistenceMod();
 
     this.dataMod = new DataMod(this.persistenceMod);
-
-    this.testMod = new TestMod(this.wrapper, this.dataMod);
-    this.menuMod = menuMod(this.wrapper);
-
-
-    this.eventMod = eventMod(this.wrapper);
-}
+    this.dataMod.getDataFromServer();
+    this.menuMod = new MenuMod(this.wrapper, this.persistenceMod, this.dataMod);
+    this.menuMod.setQuestionList();
+    this.testMod = new TestMod(this.wrapper, this.persistenceMod, this.dataMod);
+    this.testMod.loadTest();
+};
 
 var main = new mainMod();
 main.init();
