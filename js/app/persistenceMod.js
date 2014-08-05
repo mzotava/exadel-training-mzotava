@@ -13,7 +13,7 @@
     };
 
     persistenceMod.prototype.getFromStorage = function(key){
-        localStorage.getItem(key);
+        return localStorage.getItem(key);
     };
 
     persistenceMod.prototype.setJSON = function(key, value){
@@ -21,7 +21,7 @@
     };
 
     persistenceMod.prototype.getJSON = function(key){
-        JSON.parse(localStorage.getItem(key));
+        return JSON.parse(localStorage.getItem(key));
     };
 
     persistenceMod.prototype.setNullToStorage = function(){
@@ -46,7 +46,7 @@
                 this.setToStorage("answ", this.currentQuestionNum);
                 this.setToStorage("right", this.rightAnswers);
             }
-        this.setToStorage("test", persistsnseMod.currentTestNum);
+        this.setToStorage("test", this.currentTestNum);
     };
 
     win.PersistenceMod = persistenceMod;

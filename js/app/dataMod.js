@@ -24,11 +24,13 @@
             this.persist.currentQuestionNum++;
         if (this.persist.currentQuestionNum >= qLength)
             this.persist.currentQuestionNum = 0;
+        this.persist.setToStorage("answ", this.persist.currentQuestionNum);
     };
 
     dataMod.prototype.deleteAttrAnswered = function (testNum, qLength) {
         for (var variantNumForDel = 0; variantNumForDel < qLength; variantNumForDel++)
             delete this.quizData[testNum].questions[variantNumForDel].answered;
+        this.persist.setJSON("qData", this.quizData);
     };
 
     dataMod.prototype.countAnswered = function (testNum, qLength) {
